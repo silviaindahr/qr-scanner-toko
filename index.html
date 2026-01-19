@@ -5,47 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QR Scanner Toko</title>
 
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#667eea" />
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
 </head>
-
 <body>
-  <h2>📱 QR Scanner Toko</h2>
-  <button onclick="startScan()">Scan QR</button>
-  <div id="reader" style="width:300px;"></div>
-  <pre id="output"></pre>
+
+<h2>📱 QR Scanner Toko</h2>
+<button onclick="startScan()">Scan QR</button>
+<div id="reader" style="width:300px"></div>
+<pre id="log"></pre>
 
 <script>
-const APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwOGXJKed3pk0j2G9sUnU1EzNdIK5onFv_3ABKIo1P7dQL6XFNQG6Xfwx4JqNoxwTSMWw/exec";
-
-let qr;
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwuyL75r42jv0Ip6WFT_PLfXr8bgz0JCnD-U06S01pwnZQ9CHUAy-zIZz94Be6QWwkobg/exec";
+function log(msg) {
+  document.getElementById("log").textContent += msg + "\n";
+}
 
 function startScan() {
-  qr = new Html5Qrcode("reader");
+  const qr = new Html5Qrcode("reader");
   qr.start(
     { facingMode: "environment" },
     { fps: 10, qrbox: 250 },
-    (text) => {
+    text => {
       qr.stop();
-      loadData(text);
+      log("SCAN: " + text);
+      kirimKeSpreadsheet(text);
     }
   );
 }
 
-async function loadData(code) {
-  const res = await fetch(`${APPS_SCRIPT_URL}?action=get&code=${code}`);
-  const data = await res.json();
-  document.getElementById("output").textContent =
-    JSON.stringify(data, null, 2);
-}
-
-/* SERVICE WORKER */
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js");
+function kirimKeSpreadsheet(kode) {
+  fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "save",
+      kode: kode
+    })
+  })
+  .then(r => r.text())
+  .then(d => log("RESPON: " + d))
+  .catch(e => log("ERROR: " + e));
 }
 </script>
+
 </body>
 </html>
