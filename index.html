@@ -3,50 +3,73 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>QR Scanner Toko</title>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2e7d32">
+
+  <!-- JS -->
+  <script defer src="app.js"></script>
+
+  <style>
+    .btn-scan {
+  background: #2563eb;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    button {
+      padding: 10px;
+      width: 100%;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
 </head>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <body>
 
-<h2>📱 QR Scanner Toko</h2>
-<button onclick="startScan()">Scan QR</button>
-<div id="reader" style="width:300px"></div>
-<pre id="log"></pre>
+  <h2>📦 Monitoring Sales Toko</h2>
 
-<script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwuyL75r42jv0Ip6WFT_PLfXr8bgz0JCnD-U06S01pwnZQ9CHUAy-zIZz94Be6QWwkobg/exec";
-function log(msg) {
-  document.getElementById("log").textContent += msg + "\n";
-}
+<div class="card">
+  <label>ID Toko</label>
+  <input type="text" id="tokoId" placeholder="contoh: TOKO001">
+  <br><br>
 
-function startScan() {
-  const qr = new Html5Qrcode("reader");
-  qr.start(
-    { facingMode: "environment" },
-    { fps: 10, qrbox: 250 },
-    text => {
-      qr.stop();
-      log("SCAN: " + text);
-      kirimKeSpreadsheet(text);
-    }
-  );
-}
+  <button onclick="startScan()">📷 Scan QR Toko</button>
+  <br><br>
 
-function kirimKeSpreadsheet(kode) {
-  fetch(APPS_SCRIPT_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      action: "save",
-      kode: kode
-    })
-  })
-  .then(r => r.text())
-  .then(d => log("RESPON: " + d))
-  .catch(e => log("ERROR: " + e));
-}
-</script>
+  <button onclick="ambilData()">Ambil Data</button>
+</div>
+
+<!-- Area kamera -->
+<div id="scanner" style="display:none;">
+  <video id="video" width="100%" autoplay></video>
+  <button onclick="stopScan()">❌ Tutup Kamera</button>
+</div>
+
+  <div id="hasil"></div>
 
 </body>
 </html>
