@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>QR Scanner Toko</title>
 
@@ -10,28 +10,38 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#2e7d32">
 
-  <!-- CSS / JS lain -->
-</head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- QR LIB -->
+  <!-- QR Scanner -->
   <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <!-- App JS -->
+  <script defer src="app.js"></script>
 
   <style>
     body {
-      font-family: Arial;
+      font-family: Arial, sans-serif;
       background: #f5f5f5;
       padding: 20px;
+    }
+    h2 {
+      text-align: center;
     }
     .card {
       background: white;
       padding: 15px;
       border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 6px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
     }
     button {
       width: 100%;
       padding: 12px;
-      margin-top: 10px;
+      margin-top: 8px;
       background: #2e7d32;
       color: white;
       border: none;
@@ -40,7 +50,12 @@
       cursor: pointer;
     }
     #reader {
-      margin-top: 15px;
+      margin-top: 10px;
+    }
+    #totalHutang {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -49,46 +64,36 @@
 
 <h2>📦 Monitoring Sales Toko</h2>
 
+<!-- SCAN & AMBIL DATA -->
 <div class="card">
-  <label>ID Toko</label>
-  <input id="tokoId" placeholder="contoh: TOKO_001" style="width:100%;padding:8px">
+  <label><b>ID Toko</b></label>
+  <input id="tokoId" placeholder="contoh: TOKO_001">
 
   <button onclick="startScan()">📷 Scan QR Toko</button>
   <button onclick="ambilData()">📤 Ambil Data</button>
 
   <div id="reader"></div>
+  <div id="totalHutang"></div>
 </div>
 
-<script>
-  let scanner;
+<!-- TAMBAH TRANSAKSI -->
+<div class="card">
+  <h3>➕ Tambah Transaksi</h3>
 
-  function startScan() {
-    scanner = new Html5Qrcode("reader");
+  <label>Varian</label>
+  <input id="varian" placeholder="contoh: Kerupuk Udang">
 
-    scanner.start(
-      { facingMode: "environment" },
-      { fps: 10, qrbox: 250 },
-      (text) => {
-        document.getElementById("tokoId").value = text;
-        scanner.stop();
-        alert("QR terbaca: " + text);
-      }
-    ).catch(err => {
-      alert("Kamera error: " + err);
-    });
-  }
+  <label>Jumlah</label>
+  <input id="jumlah" type="number" placeholder="contoh: 10">
 
-  function ambilData() {
-    const tokoId = document.getElementById("tokoId").value;
-    if (!tokoId) {
-      alert("❗ ID Toko kosong");
-      return;
-    }
+  <label>Harga Satuan</label>
+  <input id="harga" type="number" placeholder="contoh: 5000">
 
-    alert("Siap ambil data untuk: " + tokoId);
-    // NANTI DISAMBUNG KE GOOGLE SCRIPT
-  }
-</script>
+  <button onclick="tambahTransaksi()">➕ Simpan ke Spreadsheet</button>
+</div>
+
+<!-- HASIL DATA -->
+<div id="hasil"></div>
 
 </body>
 </html>
