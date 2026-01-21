@@ -1,20 +1,23 @@
-self.addEventListener("install", () => {
-  console.log("Service Worker installed");
-});
-
-self.addEventListener("fetch", () => {
-});
-function startScan() {
-  const html5QrCode = new Html5Qrcode("reader");
-
-  html5QrCode.start(
-    { facingMode: "environment" },
-    { fps: 10, qrbox: 250 },
-    (decodedText) => {
-      document.getElementById("tokoId").value = decodedText;
-      html5QrCode.stop();
-      ambilData(); // langsung ambil data
+{
+  "name": "QR Scanner Toko - Monitoring Sales",
+  "short_name": "QR Toko",
+  "description": "Aplikasi scan QR untuk monitoring sales dan pembayaran toko",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2e7d32",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
-  );
+  ]
 }
-;
