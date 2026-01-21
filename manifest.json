@@ -1,10 +1,13 @@
 {
   "name": "QR Scanner Toko - Monitoring Sales",
-  "short_name": "QR Scanner",
-  "start_url": "./index.html",
+  "short_name": "QR Toko",
+  "description": "Aplikasi scan QR untuk monitoring sales dan pembayaran toko",
+  "start_url": ".",
+  "scope": ".",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#2e7d32",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "icon-192.png",
