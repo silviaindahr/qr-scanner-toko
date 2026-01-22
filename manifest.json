@@ -1,23 +1,11 @@
 {
-  "name": "QR Scanner Toko - Monitoring Sales",
-  "short_name": "QR Toko",
-  "description": "Aplikasi scan QR untuk monitoring sales dan pembayaran toko",
-  "start_url": ".",
-  "scope": ".",
+  "name": "Sales App Toko",
+  "short_name": "SalesApp",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2e7d32",
-  "orientation": "portrait",
+  "background_color": "#667eea",
+  "theme_color": "#667eea",
   "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "icons.json", "sizes": "192x192", "type": "image/png" }
   ]
 }
